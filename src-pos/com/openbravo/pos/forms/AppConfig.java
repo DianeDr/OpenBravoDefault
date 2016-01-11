@@ -19,12 +19,15 @@
 
 package com.openbravo.pos.forms;
 
+import gnu.io.CommPortIdentifier;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Locale;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -39,6 +42,7 @@ public class AppConfig implements AppProperties {
      
     private Properties m_propsconfig;
     private File configfile;
+    private  ArrayList portConection ;
       
     public AppConfig(String[] args) {
         if (args.length == 0) {
@@ -55,7 +59,6 @@ public class AppConfig implements AppProperties {
     private void init(File configfile) {
         this.configfile = configfile;
         m_propsconfig = new Properties();
-
         logger.info("Reading configuration file: " + configfile.getAbsolutePath());
     }
     
@@ -119,6 +122,10 @@ public class AppConfig implements AppProperties {
             m_propsconfig.store(out, AppLocal.APP_NAME + ". Configuration file.");
             out.close();
         }
+    }
+    
+    public Enumeration<CommPortIdentifier> getPortLists() {
+	return CommPortIdentifier.getPortIdentifiers();
     }
     
     private void loadDefault() {
@@ -191,5 +198,19 @@ public class AppConfig implements AppProperties {
         m_propsconfig.setProperty("paper.standard.mediasizename", "A4");
 
         m_propsconfig.setProperty("machine.uniqueinstance", "false");
+    }
+    
+    
+    public ArrayList gerPortConection() {
+        if(portConection == null) {
+            Enumeration<CommPortIdentifier> port = getPortLists();
+            portConection = new ArrayList();
+            while (port.hasMoreElements()) {
+                String p = port.nextElement().getName();
+                portConection.add(p);
+            }
+            return portConection;
+        } else 
+            return portConection;
     }
 }
