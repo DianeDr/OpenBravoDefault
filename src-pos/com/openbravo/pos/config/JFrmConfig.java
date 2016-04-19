@@ -41,11 +41,11 @@ public class JFrmConfig extends javax.swing.JFrame {
         initComponents();
         
         try {
-        	//	Dixon Martinez 2016-04-19
-        	//	Delete reference class JRootFrame
+            //	Dixon Martinez 2016-04-19
+            //	Delete reference class JRootFrame
             //	this.setIconImage(ImageIO.read(JRootFrame.class.getResourceAsStream("/com/openbravo/images/favicon.png")));
-        	this.setIconImage(ImageIO.read(JRootKiosk.class.getResourceAsStream("/com/openbravo/images/favicon.png")));
-        	//	End Dixon Martinez
+            this.setIconImage(ImageIO.read(JRootKiosk.class.getResourceAsStream("/com/openbravo/images/favicon.png")));
+            //	End Dixon Martinez
         } catch (IOException e) {
         }   
         setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION + " - " + AppLocal.getIntString("Menu.Configuration"));

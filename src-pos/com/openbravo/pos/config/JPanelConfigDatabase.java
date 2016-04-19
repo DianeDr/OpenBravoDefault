@@ -19,12 +19,25 @@
 
 package com.openbravo.pos.config;
 
+import com.openbravo.data.gui.JMessageDialog;
+import com.openbravo.data.gui.MessageInf;
+import com.openbravo.data.loader.Session;
 import com.openbravo.data.user.DirtyManager;
 import java.awt.Component;
 import com.openbravo.pos.forms.AppConfig;
 import com.openbravo.pos.forms.AppLocal;
+import com.openbravo.pos.forms.DriverWrapper;
 import com.openbravo.pos.util.AltEncrypter;
 import com.openbravo.pos.util.DirectoryEvent;
+import java.io.File;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.sql.Connection;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -39,6 +52,11 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         
         initComponents();
         
+        jCmbDBType.addItem(APACHE_DERBY_EMBEDDED);
+        jCmbDBType.addItem(HSQLDB);
+        jCmbDBType.addItem(MYSQL);
+        jCmbDBType.addItem(POSTGRE_SQL);
+        
         jtxtDbDriverLib.getDocument().addDocumentListener(dirty);
         jtxtDbDriver.getDocument().addDocumentListener(dirty);
         jtxtDbURL.getDocument().addDocumentListener(dirty);
@@ -48,14 +66,17 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         jbtnDbDriverLib.addActionListener(new DirectoryEvent(jtxtDbDriverLib));
     }
     
+    @Override
     public boolean hasChanged() {
         return dirty.isDirty();
     }
     
+    @Override
     public Component getConfigComponent() {
         return this;
     }
    
+    @Override
     public void loadProperties(AppConfig config) {
         
         jtxtDbDriverLib.setText(config.getProperty("db.driverlib"));
@@ -75,6 +96,7 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         dirty.setDirty(false);
     }
    
+    @Override
     public void saveProperties(AppConfig config) {
         
         config.setProperty("db.driverlib", jtxtDbDriverLib.getText());
@@ -107,6 +129,9 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
         jtxtDbUser = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         jtxtDbPassword = new javax.swing.JPasswordField();
+        jCmbDBType = new javax.swing.JComboBox<>();
+        jLabel5 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(AppLocal.getIntString("Label.Database"))); // NOI18N
 
@@ -122,6 +147,22 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
 
         jLabel4.setText(AppLocal.getIntString("Label.DbPassword")); // NOI18N
 
+        jCmbDBType.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCmbDBTypeActionPerformed(evt);
+            }
+        });
+
+        java.util.ResourceBundle bundle = java.util.ResourceBundle.getBundle("pos_messages"); // NOI18N
+        jLabel5.setText(bundle.getString("Label.Database")); // NOI18N
+
+        jButton1.setText(bundle.getString("Button.Test")); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -133,24 +174,30 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
                     .addComponent(jLabel1)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel4))
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jtxtDbURL, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtxtDbDriverLib, javax.swing.GroupLayout.PREFERRED_SIZE, 328, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtxtDbDriver, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jbtnDbDriverLib))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jtxtDbURL, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                        .addComponent(jtxtDbDriverLib, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 328, Short.MAX_VALUE)
+                        .addComponent(jtxtDbDriver, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCmbDBType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addComponent(jtxtDbPassword, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jtxtDbUser, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jButton1)
+                    .addComponent(jbtnDbDriverLib))
+                .addContainerGap(43, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jCmbDBType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -165,15 +212,21 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
                     .addComponent(jtxtDbURL, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel3)
-                    .addComponent(jtxtDbUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel4)
-                    .addComponent(jtxtDbPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel3)
+                            .addComponent(jtxtDbUser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel4)
+                            .addComponent(jtxtDbPassword, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
+                        .addComponent(jButton1)
+                        .addGap(41, 41, 41))))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -189,18 +242,82 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(14, Short.MAX_VALUE))
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jCmbDBTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbDBTypeActionPerformed
+        String dirname = System.getProperty("dirname.path");
+        dirname = dirname == null ? "./" : dirname;
+        
+        if (APACHE_DERBY_EMBEDDED.equals(jCmbDBType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(new File(new File(dirname), "lib/derby.jar").getAbsolutePath());
+            jtxtDbDriver.setText("org.apache.derby.jdbc.EmbeddedDriver");
+            jtxtDbURL.setText("jdbc:derby:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-database").getAbsolutePath() + ";create=true");
+            jtxtDbUser.setText("");
+            jtxtDbPassword.setText("");                       
+        } else if (HSQLDB.equals(jCmbDBType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(new File(new File(dirname), "lib/hsqldb.jar").getAbsolutePath());
+            jtxtDbDriver.setText("org.hsqldb.jdbcDriver");
+            jtxtDbURL.setText("jdbc:hsqldb:file:" + new File(new File(System.getProperty("user.home")), AppLocal.APP_ID + "-db").getAbsolutePath() + ";shutdown=true");
+            jtxtDbUser.setText("SA");
+            jtxtDbPassword.setText("");            
+        } else if (MYSQL.equals(jCmbDBType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(new File(new File(dirname), "lib/mysql-connector-java-5.1.26-bin.jar").getAbsolutePath());
+            jtxtDbDriver.setText("com.mysql.jdbc.Driver");
+            jtxtDbURL.setText("jdbc:mysql://localhost:3306/OpenBravo");
+            jtxtDbUser.setText("openbravo");
+            jtxtDbPassword.setText("openbravo");
+        } else if (POSTGRE_SQL.equals(jCmbDBType.getSelectedItem())) {
+            jtxtDbDriverLib.setText(new File(new File(dirname), "lib/postgresql-9.4-1201.jdbc4.jar").getAbsolutePath());
+            jtxtDbDriver.setText("org.postgresql.Driver");
+            jtxtDbURL.setText("jdbc:postgresql://localhost:5432/OpenBravo");            
+            jtxtDbUser.setText("openbravo");
+            jtxtDbPassword.setText("openbravo");
+        }
+    }//GEN-LAST:event_jCmbDBTypeActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        try {
+            String driverlib = jtxtDbDriverLib.getText();
+            String driver = jtxtDbDriver.getText();
+            String url = jtxtDbURL.getText();
+            String user = jtxtDbUser.getText();
+            String password = new String(jtxtDbPassword.getPassword());
+
+            ClassLoader cloader = new URLClassLoader(new URL[]{new File(driverlib).toURI().toURL()});
+            DriverManager.registerDriver(new DriverWrapper((Driver) Class.forName(driver, true, cloader).newInstance()));
+
+            Session session =  new Session(url, user, password);
+            Connection connection = session.getConnection();
+            boolean isValid;
+            isValid = (connection == null) ? false : connection.isValid(1000);
+
+            if (isValid) {
+                JOptionPane.showMessageDialog(this, AppLocal.getIntString("message.databasesuccess"), "Connection Test", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, "Connection Error"));
+            }
+        } catch (InstantiationException | IllegalAccessException | MalformedURLException | ClassNotFoundException e) {
+            JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.databasedrivererror"), e));
+        } catch (SQLException e) {
+            JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, AppLocal.getIntString("message.databaseconnectionerror"), e));
+        } catch (Exception e) {
+            JMessageDialog.showMessage(this, new MessageInf(MessageInf.SGN_WARNING, "Unknown exception", e));
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
     
     
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButton1;
+    private javax.swing.JComboBox<String> jCmbDBType;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel18;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton jbtnDbDriverLib;
     private javax.swing.JTextField jtxtDbDriver;
@@ -209,5 +326,10 @@ public class JPanelConfigDatabase extends javax.swing.JPanel implements PanelCon
     private javax.swing.JTextField jtxtDbURL;
     private javax.swing.JTextField jtxtDbUser;
     // End of variables declaration//GEN-END:variables
+
+    private String APACHE_DERBY_EMBEDDED = "Apache Derby Embedded";
+    private String HSQLDB = "HSQLDB";
+    private String MYSQL = "MySQL";
+    private String POSTGRE_SQL = "PostgreSQL";
     
 }
