@@ -27,6 +27,8 @@ import javax.swing.JFrame;
 import com.openbravo.pos.instance.AppMessage;
 import com.openbravo.pos.instance.InstanceManager;
 import java.awt.BorderLayout;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -38,13 +40,19 @@ public class JRootKiosk extends javax.swing.JFrame implements AppMessage {
     
     private JRootApp m_rootapp;
     private AppProperties m_props;
+    /**
+     * Dixon Martinez
+     * Initialize and declare variable isFullScreen
+     */
+    private boolean isFullScreen = false;
     
     /** Creates new form JRootKiosk */
     public JRootKiosk() {
-        
-        setUndecorated(true);
-        setResizable(false);
-        
+        //  Dixon Martinez
+        //  move code to method
+//        setUndecorated(true);
+//        setResizable(false);
+        //  End Dixon Martinez
         initComponents();
     }
     
@@ -69,10 +77,13 @@ public class JRootKiosk extends javax.swing.JFrame implements AppMessage {
             add(m_rootapp, BorderLayout.CENTER);            
     
             setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION);
-            
-            Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
-            setBounds(0, 0, d.width, d.height);        
-            
+            if(isFullScreen){
+            	setRootKiosk();
+                setUndecorated(true);
+                setResizable(false);
+            }else {
+            	setRootFrame(); 
+            }
             setVisible(true);                        
         } else {
             new JFrmConfig(props).setVisible(true); // Show the configuration window.
@@ -88,6 +99,37 @@ public class JRootKiosk extends javax.swing.JFrame implements AppMessage {
                 requestFocus();
             }
         });
+    }
+    
+    /**
+     * Dixon Martinez 
+     * Set value to isFullScreen 
+     * @param isFullScreen 
+     */
+    public void setIsFullScreen(boolean isFullScreen) {
+        this.isFullScreen = isFullScreen;
+    }
+    
+    /**
+     * Dixon Martinez
+     * Set Frame to Full Screen
+     */
+    private void setRootKiosk() {
+        Dimension d = Toolkit.getDefaultToolkit().getScreenSize();
+        setBounds(0, 0, d.width, d.height);
+    }
+    
+    /**
+     * Dixon Martinez
+     * Set Frame to Window 
+     */
+    private void setRootFrame() {
+        try {
+            this.setIconImage(ImageIO.read(JRootKiosk.class.getResourceAsStream("/com/openbravo/images/favicon.png")));
+        } catch (IOException e) {}
+        setTitle(AppLocal.APP_NAME + " - " + AppLocal.APP_VERSION);
+        pack();
+        setLocationRelativeTo(null);
     }
     
     /** This method is called from within the constructor to

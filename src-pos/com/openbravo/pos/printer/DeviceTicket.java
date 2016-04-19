@@ -26,6 +26,7 @@ import com.openbravo.pos.printer.javapos.DeviceFiscalPrinterJavaPOS;
 import com.openbravo.pos.printer.javapos.DevicePrinterJavaPOS;
 import com.openbravo.pos.printer.printer.DevicePrinterPrinter;
 import com.openbravo.pos.printer.screen.*;
+import com.openbravo.pos.printer.tfhka.FiscalPrinterTFHKA;
 
 import com.openbravo.pos.util.StringParser;
 import java.awt.Component;
@@ -68,11 +69,18 @@ public class DeviceTicket {
         String sFiscalType = sf.nextToken(':');
         String sFiscalParam1 = sf.nextToken(',');
         try {
-            if ("javapos".equals(sFiscalType)) {
-                m_deviceFiscal = new DeviceFiscalPrinterJavaPOS(sFiscalParam1);
-            } else {
-                m_deviceFiscal = new DeviceFiscalPrinterNull();
-            }
+            if (null != sFiscalType) 
+                switch (sFiscalType) {
+                    case "javapos":
+                        m_deviceFiscal = new DeviceFiscalPrinterJavaPOS(sFiscalParam1);
+                        break;
+                    case "tfhka":
+                        m_deviceFiscal = new FiscalPrinterTFHKA(sFiscalParam1);
+                        break;
+                    default:
+                        m_deviceFiscal = new DeviceFiscalPrinterNull();
+                        break;
+                }
         } catch (TicketPrinterException e) {
             m_deviceFiscal = new DeviceFiscalPrinterNull(e.getMessage());
         }

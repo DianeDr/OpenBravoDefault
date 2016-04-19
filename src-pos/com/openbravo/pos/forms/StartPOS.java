@@ -98,14 +98,21 @@ public class StartPOS {
                     logger.log(Level.WARNING, "Cannot set look and feel", e);
                 }
                 
+//                String screenmode = config.getProperty("machine.screenmode");
+//                if ("fullscreen".equals(screenmode)) {
+//                    JRootKiosk rootkiosk = new JRootKiosk();
+//                    rootkiosk.initFrame(config);
+//                } else {
+//                    JRootFrame rootframe = new JRootFrame(); 
+//                    rootframe.initFrame(config);
+//                }
+//              Dixon Martinez 
                 String screenmode = config.getProperty("machine.screenmode");
-                if ("fullscreen".equals(screenmode)) {
-                    JRootKiosk rootkiosk = new JRootKiosk();
-                    rootkiosk.initFrame(config);
-                } else {
-                    JRootFrame rootframe = new JRootFrame(); 
-                    rootframe.initFrame(config);
-                }
+                boolean isFullScreen = "fullscreen".equals(screenmode); 
+                JRootKiosk rootkiosk = new JRootKiosk();
+                rootkiosk.setIsFullScreen(isFullScreen);
+                rootkiosk.initFrame(config);
+//              End Dixon Martinez 
             }
         });    
     }    

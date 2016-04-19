@@ -21,6 +21,7 @@ package com.openbravo.pos.comm;
 
 import gnu.io.*;
 import java.io.*;
+import java.util.Enumeration;
 
 /**
  *
@@ -98,4 +99,5 @@ public class CommStream {
         init();
         return m_out;
     }    
+    
 }

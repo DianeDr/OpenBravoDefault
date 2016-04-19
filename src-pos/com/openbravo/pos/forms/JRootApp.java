@@ -43,6 +43,7 @@ import com.openbravo.data.loader.Session;
 import com.openbravo.pos.scale.DeviceScale;
 import com.openbravo.pos.scanpal2.DeviceScanner;
 import com.openbravo.pos.scanpal2.DeviceScannerFactory;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.Locale;
 import java.util.regex.Matcher;
@@ -254,36 +255,46 @@ public class JRootApp extends JPanel implements AppView {
     }
     
     // Interfaz de aplicacion
+    @Override
     public DeviceTicket getDeviceTicket(){
         return m_TP;
     }
     
+    @Override
     public DeviceScale getDeviceScale() {
         return m_Scale;
     }
+    @Override
     public DeviceScanner getDeviceScanner() {
         return m_Scanner;
     }
     
+    @Override
     public Session getSession() {
         return session;
     } 
 
+    @Override
     public String getInventoryLocation() {
         return m_sInventoryLocation;
     }   
+    @Override
     public String getActiveCashIndex() {
         return m_sActiveCashIndex;
     }
+    @Override
     public int getActiveCashSequence() {
         return m_iActiveCashSequence;
     }
+    @Override
     public Date getActiveCashDateStart() {
         return m_dActiveCashDateStart;
     }
+    @Override
     public Date getActiveCashDateEnd(){
         return m_dActiveCashDateEnd;
     }
+    @Override
     public void setActiveCash(String sIndex, int iSeq, Date dStart, Date dEnd) {
         m_sActiveCashIndex = sIndex;
         m_iActiveCashSequence = iSeq;
@@ -294,10 +305,12 @@ public class JRootApp extends JPanel implements AppView {
         m_dlSystem.setResourceAsProperties(m_props.getHost() + "/properties", m_propsdb);
     }   
        
+    @Override
     public AppProperties getProperties() {
         return m_props;
     }
     
+    @Override
     public Object getBean(String beanfactory) throws BeanFactoryException {
         
         // For backwards compatibility
@@ -325,7 +338,7 @@ public class JRootApp extends JPanel implements AppView {
                         bf = new BeanFactoryObj(bean);
                     }
 
-                } catch (Exception e) {
+                } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | SecurityException | IllegalArgumentException | InvocationTargetException e) {
                     // ClassNotFoundException, InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
                     throw new BeanFactoryException(e);
                 }
@@ -373,14 +386,17 @@ public class JRootApp extends JPanel implements AppView {
        
     }
     
+    @Override
     public void waitCursorBegin() {
         setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
     }
     
+    @Override
     public void waitCursorEnd(){
         setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
     }
     
+    @Override
     public AppUserView getAppUserView() {
         return m_principalapp;
     }
