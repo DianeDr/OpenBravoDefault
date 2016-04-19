@@ -32,7 +32,7 @@
     <property name="javac.deprecation" value="off"/>
     <property name="javac.optimize" value="on"/>
     <property name="javac.debug" value="off"/>
-    <property name="javac.minVMVersion" value="1.6"/>
+    <property name="javac.minVMVersion" value="1.7"/>
     <!-- read in property files -->
     <property file="build.properties" />
     <property name="src.pos" value="${basedir}/src-pos"/>
@@ -41,8 +41,8 @@
     <property name="src.erp" value="${basedir}/src-erp"/>
     <property name="reports" value="${basedir}/reports"/>
     <property name="locales" value="${basedir}/locales"/>
-    <property name="src.pda" value="${basedir}/src-pda"/>
-    <property name="src.web" value="${basedir}/web"/>
+    <!--  <property name="src.pda" value="${basedir}/src-pda"/>
+    <property name="src.web" value="${basedir}/web"/>-->
     <property name="jetty.lib" value="${basedir}/jetty/lib"/>
     <property name="lib" value="${basedir}/lib"/>
 
@@ -67,11 +67,11 @@
     <target name="init.jar">
         <delete dir="${dest.jar}" />
     </target>
-
+	<!--  
     <target name="init.war">
         <delete dir="${dest.war}" />
     </target>
-
+-->
     <target name="init.dist">
         <delete dir="${dest.dist}" />
     </target>
@@ -79,11 +79,11 @@
     <target name="init.installer.pos">
         <delete dir="${dest.installer.pos}" />
     </target>
-
+<!--  
     <target name="init.installer.pda">
 	    <mkdir dir="${dest.installer.pda}" />
     </target>
-
+-->
     <!-- ================================================================= -->
     <!-- C O M P I L E                                                     -->
     <!-- ================================================================= -->
@@ -266,7 +266,7 @@
     <!-- ================================================================= -->
     <!-- C O M P I L E - P D A   M O D U L E                               -->
     <!-- ================================================================= -->
-
+<!--  
     <target name="compile.pda" depends="init.classes">
         <mkdir dir="${dest.classes}/pda" />
 
@@ -289,12 +289,12 @@
             <fileset dir="${src.pda}" includes="**/*.properties"/>
         </copy>
     </target>
-
+-->
 
     <!-- ================================================================= -->
     <!-- W A R                                                            -->
     <!-- ================================================================= -->
-
+<!-- 
     <target name="war" depends="init.war,compile.pda" description="Generate the .war file.">
 
         <mkdir dir="${basedir}/build/zip" />
@@ -320,12 +320,12 @@
         <delete dir="${basedir}/build/zip"/>
     </target>
 
-
+ -->
     <!-- ================================================================= -->
     <!-- D I S T R I B U T I O N  F I L E S                                -->
     <!-- ================================================================= -->
     
-    <target name="dist" depends="dist.bin,dist.src,dist.pda" description="Generate the release files">
+    <target name="dist" depends="dist.bin,dist.src" description="Generate the release files">
     </target>
   
     <target name="dist.bin" depends="init.dist,jar" description="Generate the bin zip file.">
@@ -355,8 +355,7 @@
         <zip zipfile="${dest.dist}/${name}_${version}_bin.zip" basedir="${basedir}/build/zip" />
         <delete dir="${basedir}/build/zip" />
     </target>
-
-    <target name="dist.pda" depends="init.dist,war" description="Generate de pda zip file">
+<!--    <target name="dist.pda" depends="init.dist,war" description="Generate de pda zip file">
         <mkdir dir="${basedir}/build/zip" />
 
         <copy todir="${basedir}/build/zip"  >
@@ -373,7 +372,7 @@
         <zip zipfile="${dest.dist}/${name}_${version}_pda.zip" basedir="${basedir}/build/zip" />
         <delete dir="${basedir}/build/zip" />
     </target>
-
+-->
     <target name="dist.src" depends="init.dist" description="Generate the src zip file.">
         <mkdir dir="${basedir}/build/zip" />
 
@@ -431,16 +430,18 @@
 
         <!-- pda -->
 
-        <copy todir="${basedir}/build/zip/src-pda">
+        <!-- <copy todir="${basedir}/build/zip/src-pda">
             <fileset dir="${src.pda}"/>
         </copy>
+         -->
         <copy todir="${basedir}/build/zip/jetty">
             <fileset dir="${basedir}/jetty"/>
         </copy>
+        <!-- 
         <copy todir="${basedir}/build/zip/web">
             <fileset dir="${basedir}/web"/>
         </copy>
-
+ -->
         <!-- licensing -->
 
         <copy todir="${basedir}/build/zip/licensing">

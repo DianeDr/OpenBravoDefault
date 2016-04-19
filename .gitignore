@@ -13,3 +13,6 @@ hs_err_pid*
 /build/
 /dist/
 /bin/
+/pda/nbproject/private/
+/pda/build/
+/pda/dist/
