@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src-data"/>
+	<classpathentry kind="src" path="reports"/>
 	<classpathentry kind="src" path="src-pos"/>
 	<classpathentry kind="src" path="locales"/>
 	<classpathentry kind="src" path="src-beans"/>
@@ -34,5 +35,6 @@
 	<classpathentry kind="lib" path="lib/swingx-0.9.5.jar"/>
 	<classpathentry kind="lib" path="lib/velocity-1.5.jar"/>
 	<classpathentry kind="lib" path="lib/wsdl4j-1.5.1.jar"/>
+	<classpathentry kind="lib" path="lib/TfhkaJava.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
