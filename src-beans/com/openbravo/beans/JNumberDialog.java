@@ -178,8 +178,13 @@ public class JNumberDialog extends javax.swing.JDialog {
 
     private void jcmdOKActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdOKActionPerformed
 
-
-        m_value = m_jnumber.getDoubleValue();
+    	//	Dixon Martinez 2016-04-19
+    	//	Validate null pointer
+    	if(m_jnumber.getDoubleValue() != null)
+    		m_value = m_jnumber.getDoubleValue();
+    	else 
+    		m_value = new Double(0);
+    	//	End Dixon Martinez
         setVisible(false);
         dispose();
 
@@ -188,6 +193,7 @@ public class JNumberDialog extends javax.swing.JDialog {
 
     private void jcmdCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jcmdCancelActionPerformed
 
+    	m_value = new Double(0);
         setVisible(false);
         dispose();
         
@@ -195,6 +201,7 @@ public class JNumberDialog extends javax.swing.JDialog {
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
 
+    	
         setVisible(false);
         dispose();
         
