@@ -44,11 +44,11 @@ public class JPanelConfigPrinter extends javax.swing.JPanel implements PanelConf
     
     private final String[] printers = { 
             "screen", "printer", "epson", "tmu220", "star", 
-            "ithaca", "surepos", "plain", "javapos", "Not defined" 
+            "ithaca", "surepos", "plain", "javapos", NOT_DEFINED
     };
     
     private final String[] fiscalPrinters = { 
-            "javapos", "tfhka", "Not defined" 
+            "javapos", "tfhka", NOT_DEFINED
     };
     
     private final String[] typeConection = {

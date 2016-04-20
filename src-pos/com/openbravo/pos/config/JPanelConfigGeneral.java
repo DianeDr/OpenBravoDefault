@@ -45,20 +45,22 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
 
     private DirtyManager dirty = new DirtyManager();
     
+    //	Dixon Martinez 2016-04-20
+    //	Add array by conecction printer
     private String[] typeConection = {
             "serial", "file"
     };
     
     private String[] display = {
             "screen", "window", "javapos", 
-            "epson", "ld200", "surepos", "Not defined"
+            "epson", "ld200", "surepos", NOT_DEFINED
     };
     private String[] scale = {
             "screen", "dialog1", "samsungesp", 
-            "Not defined"
+            NOT_DEFINED
     };
     private String[] scanner = {
-            "scanpal2", "Not defined"
+            "scanpal2", NOT_DEFINED
     };
 
     private static final String TYPE_CONECTION = "typeConection";
@@ -66,6 +68,14 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
     private static final String TYPE_DISPLAY = "display";
     private static final String TYPE_SCALE = "scale";
     private static final String TYPE_SCANNER = "scanner";
+    
+    private static final String TICKET_SIMPLE = "Simple";
+    private static final String TICKET_STANDARD = "Estándar";
+    private static final String TICKET_RESTAURANT = "Restaurant";
+    private static final String WINDOW = "Ventana";
+    private static final String FULL_SCREEN = "Pantalla Completa";
+    
+    //	End Dixon Martinez
     
     private AppConfig config = null;
 
@@ -117,12 +127,12 @@ public class JPanelConfigGeneral extends javax.swing.JPanel implements PanelConf
             }
         });
 
-        jcboMachineScreenmode.addItem("window");
-        jcboMachineScreenmode.addItem("fullscreen");
+        jcboMachineScreenmode.addItem(WINDOW);
+        jcboMachineScreenmode.addItem(FULL_SCREEN);
 
-        jcboTicketsBag.addItem("simple");
-        jcboTicketsBag.addItem("standard");
-        jcboTicketsBag.addItem("restaurant");
+        jcboTicketsBag.addItem(TICKET_SIMPLE);
+        jcboTicketsBag.addItem(TICKET_STANDARD);
+        jcboTicketsBag.addItem(TICKET_RESTAURANT);
 
         // Set Item
         setItemToCombox(TYPE_DISPLAY);

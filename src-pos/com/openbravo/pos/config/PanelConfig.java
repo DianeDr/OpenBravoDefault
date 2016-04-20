@@ -30,5 +30,7 @@ public interface PanelConfig {
     public void loadProperties(AppConfig config);    
     public void saveProperties(AppConfig config);   
     public boolean hasChanged();
-    public Component getConfigComponent();    
+    public Component getConfigComponent();  
+    
+    public static final String NOT_DEFINED = "No Definido";
 }

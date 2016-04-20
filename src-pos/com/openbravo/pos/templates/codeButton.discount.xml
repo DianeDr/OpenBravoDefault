@@ -1,0 +1,32 @@
+  // % Discount for the total of the receipt  
+
+import com.openbravo.format.Formats;
+import com.openbravo.pos.ticket.TicketLineInfo;
+import com.openbravo.pos.ticket.TicketProductInfo; 
+import com.openbravo.pos.sales.JDiscountPanel;
+import java.io.PrintStream;
+
+discountrate = sales.getInputValue() / 100.0;  
+System.out.println(sales.getInputValue());
+System.out.println(sales.getSelectedIndex());
+index = sales.getSelectedIndex();
+System.out.println(index);
+if (index >= 0) {
+    line = ticket.getLine(index);
+    if (line.getPrice() > 0.0 && discountrate > 0.0) { 
+ 
+        sdiscount = Formats.PERCENT.formatValue(discountrate);  
+        ticket.insertLine(index + 1,
+            new TicketLineInfo(
+                    "Discount " + sdiscount,
+                    line.getProductTaxCategoryID(),
+                    line.getMultiply(), 
+                    -line.getPrice () * discountrate,
+                    line.getTaxInfo()));  
+        sales.setSelectedIndex(index + 1);
+    } else {  
+         java.awt.Toolkit.getDefaultToolkit().beep();  
+    }
+} else {
+    java.awt.Toolkit.getDefaultToolkit().beep();  
+}

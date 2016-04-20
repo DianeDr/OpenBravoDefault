@@ -1,0 +1,16 @@
+import com.openbravo.pos.ticket.TicketLineInfo;
+import com.openbravo.pos.ticket.TicketProductInfo; 
+import com.openbravo.pos.sales.JDiscountPanel;
+import java.io.PrintStream;
+
+index = sales.getSelectedIndex();
+if (index >= 0) {   
+    line = ticket.getLine(index);   
+    value = javax.swing.JOptionPane.showInputDialog("Line notes", line.getProperty("notes")); 
+    if (value != null) { 
+        // the user pressed OK 
+        line.setProperty("notes", value); 
+    }else {
+	JOptionPane.showMessageDialog(null,"No hay notas");
+    } 
+}
