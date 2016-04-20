@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
+	<classpathentry kind="lib" path="lib/jasperreports-5.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/servlet-api-2.4.jar"/>
 	<classpathentry kind="src" path="src-data"/>
 	<classpathentry kind="src" path="reports"/>
 	<classpathentry kind="src" path="src-pos"/>
@@ -20,7 +22,6 @@
 	<classpathentry kind="lib" path="lib/derby.jar"/>
 	<classpathentry kind="lib" path="lib/hsqldb.jar"/>
 	<classpathentry kind="lib" path="lib/iText-2.1.0.jar"/>
-	<classpathentry kind="lib" path="lib/jasperreports-3.1.4.jar"/>
 	<classpathentry kind="lib" path="lib/jaxrpc.jar"/>
 	<classpathentry kind="lib" path="lib/jcommon-1.0.15.jar"/>
 	<classpathentry kind="lib" path="lib/jdt-compiler-3.1.1.jar"/>

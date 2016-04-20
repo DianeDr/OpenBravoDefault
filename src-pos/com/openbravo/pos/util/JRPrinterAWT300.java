@@ -155,9 +155,9 @@ public class JRPrinterAWT300 implements Printable
 
 		printJob.setJobName("JasperReports - " + jasperPrint.getName());
 		
-		switch (jasperPrint.getOrientation())
+		switch (jasperPrint.getOrientationValue())
 		{
-			case JRReport.ORIENTATION_LANDSCAPE :
+			case LANDSCAPE :
 			{
 				pageFormat.setOrientation(PageFormat.LANDSCAPE);
 				paper.setSize(jasperPrint.getPageHeight(), jasperPrint.getPageWidth());
@@ -169,7 +169,7 @@ public class JRPrinterAWT300 implements Printable
 					);
 				break;
 			}
-			case JRReport.ORIENTATION_PORTRAIT :
+			case PORTRAIT :
 			default :
 			{
 				pageFormat.setOrientation(PageFormat.PORTRAIT);
